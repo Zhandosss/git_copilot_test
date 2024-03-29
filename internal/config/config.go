@@ -15,8 +15,8 @@ type ServerConfig struct {
 type Config struct {
 	Server       ServerConfig `mapstructure:"http_server"`
 	ClientId     string       `mapstructure:"client_id"`
-	ClientSecret string       `envconfig:"CLIENT_SECRET"`
-	Scope        string       `mapstructure:"scope"`
+	ClientSecret string
+	Scope        string `mapstructure:"scope"`
 }
 
 func New() *Config {
