@@ -1,35 +1,33 @@
 package main
 
 import (
-	"git_copilot_test/internal"
+	"git_copilot_test/internal/config"
 	"git_copilot_test/internal/endpoints/capsule"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strings"
 
 	"golang.org/x/oauth2"
 )
 
-func initOauthConfig(config *internal.Config) *oauth2.Config {
+func initOauthConfig(config *config.Config) *oauth2.Config {
 	return &oauth2.Config{
-		ClientID:     config.ClientID,
+		ClientID:     config.ClientId,
 		ClientSecret: config.ClientSecret,
-		RedirectURL:  config.RedirectURL,
-		Scopes:       config.Scopes,
+		RedirectURL:  "http://" + config.Server.Host + config.Server.Port + "/callback",
+		Scopes:       strings.Split(config.Scope, " "),
 		Endpoint:     capsule.Endpoint,
 	}
 }
 
 func main() {
-	config := internal.NewConfig()
-	log.Println("config:", config)
-	if config == nil {
-		log.Fatal("failed to load config")
-	}
-	oauthConf := initOauthConfig(config)
-
+	cfg := config.New()
+	log.Println("config:", cfg)
 	r := gin.Default()
 
+	oauthConf := initOauthConfig(cfg)
+	log.Println("oauth config:", oauthConf)
 	r.GET("/login", func(c *gin.Context) {
 		url := oauthConf.AuthCodeURL("state")
 		log.Println("redirect to:", url)
@@ -46,5 +44,6 @@ func main() {
 		log.Println("token:", token)
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	})
-	log.Fatal(r.Run(":8080"))
+
+	log.Fatal(r.Run(cfg.Server.Host + cfg.Server.Port))
 }

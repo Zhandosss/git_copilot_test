@@ -1,0 +1,5 @@
+http_server:
+  port: ":8080"
+  host: "localhost"
+client_id: "2zhdorz9pv10d"
+scope: "read write user_preference"
