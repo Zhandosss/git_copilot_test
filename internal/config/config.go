@@ -17,6 +17,7 @@ type Config struct {
 	ClientId     string       `mapstructure:"client_id"`
 	ClientSecret string
 	Scope        string `mapstructure:"scope"`
+	OpenAIKey    string
 }
 
 func New() *Config {
@@ -44,6 +45,7 @@ func New() *Config {
 		log.Fatal("Error loading .env file")
 	}
 	config.ClientSecret = os.Getenv("CLIENT_SECRET")
+	config.OpenAIKey = os.Getenv("OPENAI_KEY")
 
 	return config
 
