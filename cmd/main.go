@@ -67,6 +67,7 @@ func main() {
 					"content": message,
 				},
 			},
+			"temperature": 0.0,
 		}
 
 		jsonBody, err := json.Marshal(reqBody)
