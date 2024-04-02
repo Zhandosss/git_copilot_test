@@ -4,7 +4,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"log"
-	"os"
 )
 
 type ServerConfig struct {
@@ -12,12 +11,14 @@ type ServerConfig struct {
 	Host string `mapstructure:"host"`
 }
 
+type CapsuleConfig struct {
+	ClientId string `mapstructure:"client_id"`
+	Scope    string `mapstructure:"scope"`
+}
+
 type Config struct {
-	Server       ServerConfig `mapstructure:"http_server"`
-	ClientId     string       `mapstructure:"client_id"`
-	ClientSecret string
-	Scope        string `mapstructure:"scope"`
-	OpenAIKey    string
+	Server  ServerConfig  `mapstructure:"http_server"`
+	Capsule CapsuleConfig `mapstructure:"capsule_crm"`
 }
 
 func New() *Config {
@@ -33,8 +34,6 @@ func New() *Config {
 		log.Fatal("failed to read config file:", err)
 	}
 
-	err = viper.BindEnv("client_secret")
-
 	config := &Config{}
 	err = viper.Unmarshal(config)
 	if err != nil {
@@ -44,9 +43,6 @@ func New() *Config {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	config.ClientSecret = os.Getenv("CLIENT_SECRET")
-	config.OpenAIKey = os.Getenv("OPENAI_KEY")
-
 	return config
 
 }
