@@ -19,8 +19,8 @@ func main() {
 	server := &http.Server{
 		Addr:         cfg.Server.Host + cfg.Server.Port,
 		Handler:      handlers.InitRoutes(),
-		ReadTimeout:  20 * time.Second,
-		WriteTimeout: 20 * time.Second,
+		ReadTimeout:  60 * time.Second,
+		WriteTimeout: 60 * time.Second,
 	}
 	log.Println("Starting server on", server.Addr)
 	go func() {
